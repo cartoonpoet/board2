@@ -4,6 +4,7 @@ from rest_framework.response import Response
 from .serializers import UserSerializer
 from rest_framework import status
 from .models import User, Group, User_Group
+from rest_framework import generics, permissions
 
 
 # Create your views here.
@@ -54,3 +55,4 @@ class UserView(APIView):
             user_object = User.objects.get(id=user_id)
             user_object.delete()
             return Response("delete ok", status=status.HTTP_200_OK)
+
