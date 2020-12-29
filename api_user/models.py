@@ -4,7 +4,7 @@ from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, Permis
 
 
 class UserManager(BaseUserManager):
-    use_in_migrations = True
+    # use_in_migrations = True
     def create_user(self, id, name, password):
         user = self.model(
             id=id,
@@ -22,7 +22,7 @@ class UserManager(BaseUserManager):
 
 
 class User(AbstractBaseUser, PermissionsMixin):
-    object = UserManager()
+
     id = models.TextField(unique=True, verbose_name='아이디', primary_key=True)
     password = models.TextField(verbose_name='비번', max_length=40)
     name = models.CharField(verbose_name='이름', max_length=20)
@@ -33,10 +33,15 @@ class User(AbstractBaseUser, PermissionsMixin):
     USERNAME_FIELD = 'id'
     REQUIRED_FIELDS = ['name']
 
+    objects = UserManager()
+
     def get_name(self):
         return self.name
 
     def get_id(self):
+        return self.id
+
+    def __str__(self):
         return self.id
 
     @property

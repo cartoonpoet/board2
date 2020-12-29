@@ -3,11 +3,13 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from .serializers import UserSerializer
 from rest_framework import status
-from .models import User
+from .models import User, Group, User_Group
 
 
 # Create your views here.
+# https://d-yong.tistory.com/61?category=751110
 class UserView(APIView):
+    # 모든 또는 특정 ID 정보 불러오기
     def get(self, request, **kwargs):
         if kwargs.get('user_id') is None:
             user_queryset = User.objects.all()  # 모든 User의 정보를 불러온다.
@@ -18,6 +20,7 @@ class UserView(APIView):
             user_serializer = UserSerializer(User.objects.get(id=user_id))  # id에 해당하는 User의 정보를 불러온다
             return Response(user_serializer.data, status=status.HTTP_200_OK)
 
+    # 회원가입
     def post(self, request):
         user_serializer = UserSerializer(data=request.data)  # Request의 data를 UserSerializer로 변환
 
@@ -27,10 +30,27 @@ class UserView(APIView):
         else:
             return Response(user_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-    def patch(self, request):
-        print(request.data)
-        return Response("patch ok", status=200)
+    # 회원정보 수정
+    def patch(self, request, **kwargs):
+        if kwargs.get('user_id') is None:
+            return Response("invalid request", status=status.HTTP_400_BAD_REQUEST)
+        else:
+            user_id = kwargs.get('user_id')
+            user_object = User.objects.get(id=user_id)
+            print(user_object.name)
+            update_user_serializer = UserSerializer(user_object, data=request.data)
+            if update_user_serializer.is_valid():
+                update_user_serializer.save()
+                return Response(update_user_serializer.data, status=status.HTTP_200_OK)
+            else:
+                return Response("invalid request", status=status.HTTP_400_BAD_REQUEST)
 
-    def delete(self, request):
-        print(request.data)
-        return Response("delete ok", status=200)
+    # 회원탈퇴
+    def delete(self, request, **kwargs):
+        if kwargs.get('user_id') is None:
+            return Response("invalid request", status=status.HTTP_400_BAD_REQUEST)
+        else:
+            user_id = kwargs.get('user_id')
+            user_object = User.objects.get(id=user_id)
+            user_object.delete()
+            return Response("delete ok", status=status.HTTP_200_OK)
