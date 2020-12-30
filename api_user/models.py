@@ -4,7 +4,7 @@ from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, Permis
 
 
 class UserManager(BaseUserManager):
-    # use_in_migrations = True
+    use_in_migrations = True
     def create_user(self, id, name, password):
         user = self.model(
             id=id,

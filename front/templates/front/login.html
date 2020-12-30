@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="/static/css/commen.css">
     <link rel="stylesheet" href="/static/css/loginform.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="/static/js/cookie.js"></script>
     <script>
         checkValue = function(element){
                 var inputText1 = document.getElementById("e_mail");
@@ -26,17 +27,44 @@
                 var queryString = $("form[name=login]").serialize();
                 $.ajax({
                type : 'post',
-               url : '',
+               url : '/user/login/',
                data : queryString,
                dataType : 'json',
                error : function (xhr, status, error){
                    alert(error);
                } ,
                 success : function (json){
-                    alert(json);
+                    console.log(json);
+                    console.log(json.user.id);
+                    console.log(json.token);
+                    if(json.token == "none"){
+                        alert('아이디 또는 비밀번호를 확인해주세요.');
+                        return false;
+                    }
+                    else{
+                        setCookie('user_token', json.token, 1);
+                        setCookie('user_id', json.user.id, 1);
+                        setCookie('user_password', json.user.password, 1);
+                        location.href="board/";
+                    }
                 }
             });
             }
+
+            $(document).ready(function(){
+                $(".test").click(function (){
+                    $.ajax({
+                        type: 'DELETE',
+                        dataType: 'json',
+                        url: '/user/login/',
+                        headers: { "X-CSRFToken": getCookie("csrftoken") },
+                        data: {'id':getCookie('user_id'), 'token':getCookie('user_token'), 'password':getCookie('user_password')},
+                        success: function(result){
+                            console.log(result);
+                        }
+                    })
+                });
+            });
     </script>
 </head>
 <body>
@@ -44,8 +72,8 @@
        <section>
             <form action="" name="login" method="POST">
                 {% csrf_token %}
-                <input type="text" class="id" id="e_mail" placeholder="아이디" name="email">
-                <input type="password" class="pw" id="password"  placeholder="비밀번호" name="pw">
+                <input type="text" class="id" id="e_mail" placeholder="아이디" name="id">
+                <input type="password" class="pw" id="password"  placeholder="비밀번호" name="password">
                 <div class="discrution">
                    <br>
                     아이디 또는 비밀번호를 입력해주세요.
@@ -57,7 +85,7 @@
                             <a href="signup/">회원가입</a>
                         </li>
                         <li class="sign_up">
-                            <a href="">비밀번호 찾기</a>
+                            <a href="" class="test">비밀번호 찾기</a>
                         </li>
                     </ul>
                 </div>

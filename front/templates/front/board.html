@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <title>게시판</title>
+    <link rel="stylesheet" href="/static/css/commen.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="/static/css/boardlist.css?ver=3">
+    <script src="/static/js/cookie.js"></script>
+    <script type="text/javascript" src="/static/js/boardlist.js?ver=15"></script>
+
+</head>
+<body>
+<div class="loader"></div>
+    <div id="wrap">
+       <div class="board">
+            <span>{{ user.name }}님 환영합니다.</span>
+            <span><a href="" class="logout" >로그아웃</a></span>
+            <span><a href="">전체 글 보기</a></span>
+            <br>
+            <div class="search">
+                <span>□ 총 건의 게시물</span>
+                <form action="" method="GET">
+                    <select name="type" id="" class="search_type">
+                        <option value="title">제목</option>
+                    </select>
+                    <input type="text" class="contents" name="keyword">
+                    <input type="button" value="검색" class="searching">
+                </form>
+            </div>
+            <div class="clasified">
+                <span class="board_num">번호</span>
+                <span class="board_title">제목</span>
+                <span class="board_date">작성일</span>
+            </div>
+            <div class="post">
+                <span>1</span>
+                <span><a href="">제목</a></span>
+                <span>2020-01-01</span>
+            </div>
+                <div class="page_num">
+                    <a href="?page=&keyword=" class="pre">&lt; 이전</a>
+{#                        <a href="?page={{ i }}" class="numbers selected">{{ i }}</a>#}
+                        <a href="?page=&keyword=" class="numbers selected">1</a>
+                    <a href="?page=&keyword=" class="next">다음 &gt;</a>
+                </div>
+                <a href="board_edit" class="write">작성</a>
+        </div>
+    </div>
+</body>
+</html>

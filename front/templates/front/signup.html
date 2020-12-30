@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <title>회원가입</title>
+    <link rel="stylesheet" href="/static/css/commen.css">
+    <link rel="stylesheet" href="/static/css/signupform.css?ver=1">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script type="text/javascript" src="/static/js/checker.js?ver=2"></script>
+</head>
+<body>
+    <div id="wrap">
+       <div id="notice">회원가입</div>
+        <form method="POST" action="" class="input" name="signForm">
+            {% csrf_token %}
+            <div><input type="text" placeholder="이름" class="info nikname" name="name"></div>
+            <div><input type="text" placeholder="아이디" class="info email" name="id"></div>
+            <div><input type="password" placeholder="비밀번호" class="info pw" name="password"></div>
+            <div><input type="password" placeholder="비밀번호 확인" class="info pw re_pw" name="pw_check"></div>
+            <div class="select">
+                   <span><input type="radio" name="group" value="1" class="gender" checked>소속 1</span>
+                    <span><input type="radio" name="group" value="2" class="gender">소속 2</span>
+            </div>
+            <div><input type="button" value="회원가입" class="submit"></div>
+            <a href="../" class="back_to_login">로그인</a>
+        </form>
+    </div>
+</body>
+</html>

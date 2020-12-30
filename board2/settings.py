@@ -27,8 +27,9 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
-
-# Application definition
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': ('knox.auth.TokenAuthentication',),
+}
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -40,6 +41,8 @@ INSTALLED_APPS = [
     'rest_framework',
     'api_user',
     'front',
+    'knox',
+
 ]
 
 MIDDLEWARE = [
@@ -127,3 +130,4 @@ AUTH_USER_MODEL = 'api_user.User'
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 STATIC_URL = '/static/'
+

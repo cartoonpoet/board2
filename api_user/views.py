@@ -1,10 +1,18 @@
 from django.shortcuts import render
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from .serializers import UserSerializer
+from .serializers import UserSerializer, LoginSerializer
 from rest_framework import status
 from .models import User, Group, User_Group
+from rest_framework.status import HTTP_400_BAD_REQUEST, HTTP_404_NOT_FOUND, HTTP_200_OK
+from rest_framework.authtoken.models import Token
 from rest_framework import generics, permissions
+from knox.models import AuthToken
+from django.contrib.auth import authenticate
+from knox.auth import TokenAuthentication
+from knox.settings import knox_settings
+from rest_framework.permissions import IsAuthenticated
+from django.contrib.auth import login, logout
 
 
 # Create your views here.
@@ -23,13 +31,18 @@ class UserView(APIView):
 
     # 회원가입
     def post(self, request):
+        print('회원가입')
+        #print(request.data)
         user_serializer = UserSerializer(data=request.data)  # Request의 data를 UserSerializer로 변환
-
         if user_serializer.is_valid():
             user_serializer.save()  # UserSerializer의 유효성 검사를 한 뒤 DB에 저장
+            usergroup = User_Group()
+            usergroup.user_id = User.objects.get(id=request.data['id'])
+            usergroup.group_id = Group.objects.get(id=request.data['group'])
+            usergroup.save()
             return Response(user_serializer.data, status=status.HTTP_201_CREATED)  # client에게 JSON response 전달
         else:
-            return Response(user_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            return Response({None}, status=status.HTTP_200_OK)
 
     # 회원정보 수정
     def patch(self, request, **kwargs):
@@ -38,7 +51,7 @@ class UserView(APIView):
         else:
             user_id = kwargs.get('user_id')
             user_object = User.objects.get(id=user_id)
-            print(user_object.name)
+
             update_user_serializer = UserSerializer(user_object, data=request.data)
             if update_user_serializer.is_valid():
                 update_user_serializer.save()
@@ -56,3 +69,33 @@ class UserView(APIView):
             user_object.delete()
             return Response("delete ok", status=status.HTTP_200_OK)
 
+
+# 로그인은 아래 정보 참조
+# https://paigeblog.tistory.com/17
+class LoginView(generics.GenericAPIView):
+    serializer_class = LoginSerializer
+
+    # 로그인
+    def post(self, request):
+        print('로그인')
+        # ID/PW 확인
+        if authenticate(id=request.data['id'], password=request.data['password']) is None:
+            return Response({
+                'user': 'none',
+                'token': 'none'
+            }, status=status.HTTP_200_OK)
+
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        user = serializer.validated_data
+        if user is not None:
+            login(request, user)
+            return Response({
+                "user": UserSerializer(user,context=self.get_serializer_context()).data,"token": AuthToken.objects.create(user)[1]
+            }, status=status.HTTP_200_OK)
+
+    # 로그아웃
+    def delete(self, request):
+        print('로그아웃')
+        logout(request)
+        return Response(status=status.HTTP_204_NO_CONTENT)
