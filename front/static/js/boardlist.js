@@ -15,7 +15,7 @@ $(document).ready(function(){
             url: '../user/login/',
             headers: { "X-CSRFToken": getCookie("csrftoken") },
             success: function(result){
-
+                location.href="../"
             }
         });
     });

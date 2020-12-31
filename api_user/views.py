@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from .serializers import UserSerializer, LoginSerializer
+from .serializers import UserSerializer, LoginSerializer, UserGroupSerializer
 from rest_framework import status
 from .models import User, Group, User_Group
 from rest_framework.status import HTTP_400_BAD_REQUEST, HTTP_404_NOT_FOUND, HTTP_200_OK
@@ -32,14 +32,27 @@ class UserView(APIView):
     # 회원가입
     def post(self, request):
         print('회원가입')
-        #print(request.data)
+        print('input :', request.data)
         user_serializer = UserSerializer(data=request.data)  # Request의 data를 UserSerializer로 변환
+
         if user_serializer.is_valid():
-            user_serializer.save()  # UserSerializer의 유효성 검사를 한 뒤 DB에 저장
-            usergroup = User_Group()
-            usergroup.user_id = User.objects.get(id=request.data['id'])
-            usergroup.group_id = Group.objects.get(id=request.data['group'])
-            usergroup.save()
+            user_serializer.save() # UserSerializer의 유효성 검사를 한 뒤 DB에 저장
+            #usergroup = User_Group(user_id=user_serializer.get_id(), group_id=Group.objects.get(id=request.data['group']))
+            #print(usergroup)
+            #usergroup.save()
+
+            test = {
+                'user_id':request.data['id'],
+                'group_id':request.data['group']
+            }
+
+            usergroup_serializer = UserGroupSerializer(data=test)
+
+            print(usergroup_serializer.is_valid())
+            if usergroup_serializer.is_valid():
+                print('그룹')
+                usergroup_serializer.save()
+            # usergroup.save()
             return Response(user_serializer.data, status=status.HTTP_201_CREATED)  # client에게 JSON response 전달
         else:
             return Response({None}, status=status.HTTP_200_OK)
