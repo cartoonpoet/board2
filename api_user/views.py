@@ -32,28 +32,15 @@ class UserView(APIView):
     # 회원가입
     def post(self, request):
         print('회원가입')
-        print('input :', request.data)
         user_serializer = UserSerializer(data=request.data)  # Request의 data를 UserSerializer로 변환
 
         if user_serializer.is_valid():
-            user_serializer.save() # UserSerializer의 유효성 검사를 한 뒤 DB에 저장
-            #usergroup = User_Group(user_id=user_serializer.get_id(), group_id=Group.objects.get(id=request.data['group']))
-            #print(usergroup)
-            #usergroup.save()
-
-            test = {
-                'user_id':request.data['id'],
-                'group_id':request.data['group']
-            }
-
-            usergroup_serializer = UserGroupSerializer(data=test)
-
-            print(usergroup_serializer.is_valid())
-            if usergroup_serializer.is_valid():
-                print('그룹')
+            user_serializer.save()  # UserSerializer의 유효성 검사를 한 뒤 DB에 저장
+            usergroup = {'user_id': request.data['id'], 'group_id': request.data['group']}
+            usergroup_serializer = UserGroupSerializer(data=usergroup)
+            if  usergroup_serializer.is_valid():
                 usergroup_serializer.save()
-            # usergroup.save()
-            return Response(user_serializer.data, status=status.HTTP_201_CREATED)  # client에게 JSON response 전달
+                return Response(user_serializer.data, status=status.HTTP_201_CREATED)  # client에게 JSON response 전달
         else:
             return Response({None}, status=status.HTTP_200_OK)
 

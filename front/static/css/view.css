@@ -4,12 +4,12 @@
 #wrap{
     width: 100%;
     min-width: 1020px;
+    display: none;
 }
 .section{
     width:700px;
     margin: 0 auto;
 }
-
 
 .view_form{
     border-top: 2px solid #0076ff;
@@ -36,10 +36,15 @@
     padding-left: 10px;
 }
 .view_form .post_info li{
-    float: left;
     margin-right: 20px;
     font-size: 1rem;
     padding: 5px 0;
+}
+.writer{
+    float:left;
+}
+.write_date{
+    float:right;
 }
 .view_form .download{
     margin-top: 10px;

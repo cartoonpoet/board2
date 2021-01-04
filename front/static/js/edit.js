@@ -25,6 +25,49 @@ $(document).ready(function(){
        location.href = '../';
     });
 
+    $(".post_edit").click(function(){
+        if($('input[name=title').val()==""){
+            alert('제목을 입력하세요.');
+            return false;
+        }
+        else if($('#contents').val()==""){
+            alert('내용을 입력하세요.');
+            return false;
+        }
+        else{
+            var form = $('.edit')[0];
+            var formData = new FormData(form);
+            console.log(formData);
+            formData.append('user', getCookie("user_id"))
+            formData.append('contents', $("#contents").val().replace(/(?:\r\n|\r|\n)/g, '<br />'));
+            $.ajax({
+                type:"post",
+                enctype:'multipart/form-data',
+                url:'/board/write/',
+                data:formData,
+                dataType:'json',
+                processData:false,
+                contentType:false,
+                cache:false,
+                success:function(data){
+                    console.log("success : ", data);
+                    if(data == ""){
+                        alert('작성 실패');
+                    }
+                    else{
+                        alert('작성 완료');
+                        location.href='/board/';
+                    }
+                },
+                error:function(e){
+                    console.log("error : ", e);
+                }
+            });
+
+            return false;
+        }
+    })
+
 }); 
 
 function getFileType(filePath)
@@ -67,23 +110,4 @@ function getFileType(filePath){
         type="";
     }
     return type;
-}
-
-function checkForm(){ //폼 유효성 체크 부분
-    var title=document.edit_form.title;
-    var content=document.edit_form.content;
-    
-    if(title.value==''){
-        alert("제목을 입력하세요");
-        title.focus();
-        return false;
-    }
-    else if(content.value==''){
-        alert("내용을 입력하세요");
-        content.focus();
-        return false;
-    }
-    
-    $(".upload-hidden").val(file_name);
-    return true;
 }

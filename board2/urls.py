@@ -16,9 +16,12 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from django.conf.urls import include
+from django.conf import settings
+from django.conf.urls.static import static
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('user/', include('api_user.urls'), name='api_user'),
-    path('', include('front.urls'), name='front')
-]
+    path('', include('front.urls'), name='front'),
+    path('board/', include('api_board.urls'), name='api_board')
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

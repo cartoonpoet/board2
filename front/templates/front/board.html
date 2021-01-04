@@ -6,10 +6,53 @@
     <title>게시판</title>
     <link rel="stylesheet" href="/static/css/commen.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-    <link rel="stylesheet" href="/static/css/boardlist.css?ver=3">
+    <link rel="stylesheet" href="/static/css/boardlist.css?ver=11">
+    <link rel="stylesheet" href="/static/css/loading.css">
     <script src="/static/js/cookie.js"></script>
-    <script type="text/javascript" src="/static/js/boardlist.js?ver=16"></script>
+    <script src="/static/js/loading.js"></script>
+    <script type="text/javascript" src="/static/js/boardlist.js?ver=27"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
+    <script>
+        var store_data;
+        $(function() {
+            $.ajax({
+                type: 'GET',
+                dataType: 'json',
+                url: '/board/list/',
+                success: function(data){
+                    store_data = data;
+                    backup_data = data;
+                    console.log(data);
+                    $(".search>span").text("□ 총 "+data.length+"건의 게시물");
 
+                    if(data.length>10) {
+                        for (var i = 0; i < 10; i++) {
+                            $(".clasified").append('<div class="post"> <span>'+data[i].id+'</span><span><a href="view?num='+data[i].id+'">'+data[i].title+'</a></span> <span>'+moment(data[i].write_date).format("YYYY-MM-DD")+'</span> </div>');
+                        }
+                    }
+                    else{
+                        for (var i = 0; i < data.length; i++) {
+                            $(".clasified").append('<div class="post"> <span>'+data[i].id+'</span><span><a href="'+data[i].id+'">'+data[i].title+'</a></span> <span>'+moment(data[i].write_date).format("YYYY-MM-DD")+'</span> </div>');
+                        }
+                    }
+                    $(".pre").css("display", "none");
+                    if(Math.ceil(data.length/10)==1){
+                        $(".next").css("display", "none");
+                    }
+                    //페이지 수
+                    for(var i=1; i<=Math.ceil(data.length/10); i++){
+                        if(i==1) {
+                            $(".next").before('<a href="" class="numbers selected">' + i + '</a>');
+                        }
+                        else{
+                            $(".next").before('<a href="" class="numbers">' + i + '</a>');
+                        }
+                    }
+                    _showPage();
+                }
+            });
+        });
+    </script>
 </head>
 <body>
 <div class="loader"></div>
@@ -17,10 +60,10 @@
        <div class="board">
             <span>{{ user.name }}님 환영합니다.</span>
             <span><a href="" class="logout" >로그아웃</a></span>
-            <span><a href="">전체 글 보기</a></span>
+            <span><a href="" onClick="top.location='javascript:location.reload()'">전체 글 보기</a></span>
             <br>
             <div class="search">
-                <span>□ 총 건의 게시물</span>
+                <span></span>
                 <form action="" method="GET">
                     <select name="type" id="" class="search_type">
                         <option value="title">제목</option>
@@ -34,18 +77,17 @@
                 <span class="board_title">제목</span>
                 <span class="board_date">작성일</span>
             </div>
-            <div class="post">
-                <span>1</span>
-                <span><a href="">제목</a></span>
-                <span>2020-01-01</span>
-            </div>
+{#            <div class="post">#}
+{#                <span>1</span>#}
+{#                <span><a href="">제목</a></span>#}
+{#                <span>2020-01-01</span>#}
+{#            </div>#}
                 <div class="page_num">
-                    <a href="?page=&keyword=" class="pre">&lt; 이전</a>
-{#                        <a href="?page={{ i }}" class="numbers selected">{{ i }}</a>#}
-                        <a href="?page=&keyword=" class="numbers selected">1</a>
-                    <a href="?page=&keyword=" class="next">다음 &gt;</a>
+                    <a href="" class="pre">&lt; 이전</a>
+{#                        <a href="" class="numbers selected">1</a>#}
+                    <a href="" class="next">다음 &gt;</a>
                 </div>
-                <a href="board_edit" class="write">작성</a>
+                <a href="edit" class="write">작성</a>
         </div>
     </div>
 </body>

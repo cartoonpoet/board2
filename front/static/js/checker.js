@@ -18,6 +18,7 @@ $(document).ready(function(){
         }
         else{
             var queryString = $("form[name=signForm]").serialize();
+            console.log(queryString);
 
             $.ajax({
                type : 'post',
