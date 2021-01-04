@@ -25,6 +25,7 @@ class BoardView(APIView):
             file_queryset = BoardFile.objects.filter(num_id=kwargs.get('post_num'))
             file_serializer = FileSerializer(file_queryset, many=True)
             print(file_serializer.data)
+            print(Board.objects.filter(id=kwargs.get('post_num')).first())
             for i in file_serializer.data:
                 print(i)
 

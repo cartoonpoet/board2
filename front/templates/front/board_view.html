@@ -34,6 +34,14 @@
                     for(var i=0; i<data.file_info.length; i++){
                         $(".download").append('<h1><a href="'+data.file_info[i].file+'" download>'+decodeURI(data.file_info[i].file.split("/")[3])+'</a></h1>')
                     }
+                    var pre="/board/view?num=";
+                    var next="/board/view?num=";
+                    pre+=Number(board_num)-1;
+                    next+=Number(board_num)+1;
+
+                    $(".Previous>a").attr("href", pre);
+                    $(".next>a").attr("href", next);
+
                     _showPage();
                 }
             });
