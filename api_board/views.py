@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
@@ -23,7 +24,10 @@ class BoardView(APIView):
             board_serializer = BoardJoinSerializer(board_queryset, many=True)
             file_queryset = BoardFile.objects.filter(num_id=kwargs.get('post_num'))
             file_serializer = FileSerializer(file_queryset, many=True)
-            print(board_serializer.data)
+            print(file_serializer.data)
+            for i in file_serializer.data:
+                print(i)
+
             return Response({'basic_info': board_serializer.data, 'file_info': file_serializer.data}, status=status.HTTP_200_OK)
 
     def post(self, request):

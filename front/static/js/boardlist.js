@@ -11,12 +11,12 @@ $(document).ready(function(){
        $(".post").remove();
        if(store_data.length<=Number($(this).text())*10){
            for (var i = Number($(this).text())*10-10; i < store_data.length; i++) {
-               $(".clasified").append('<div class="post"> <span>'+store_data[i].id+'</span><span><a href="'+store_data[i].id+'">'+store_data[i].title+'</a></span> <span>'+moment(store_data[i].write_date).format("YYYY-MM-DD")+'</span> </div>');
+               $(".clasified").append('<div class="post"> <span>'+store_data[i].id+'</span><span><a href="view?num='+store_data[i].id+'">'+store_data[i].title+'</a></span> <span>'+moment(store_data[i].write_date).format("YYYY-MM-DD")+'</span> </div>');
            }
        }
        else{
            for (var i = Number($(this).text())*10-10; i < Number($(this).text())*10; i++) {
-               $(".clasified").append('<div class="post"> <span>'+store_data[i].id+'</span><span><a href="'+store_data[i].id+'">'+store_data[i].title+'</a></span> <span>'+moment(store_data[i].write_date).format("YYYY-MM-DD")+'</span> </div>');
+               $(".clasified").append('<div class="post"> <span>'+store_data[i].id+'</span><span><a href="view?num='+store_data[i].id+'">'+store_data[i].title+'</a></span> <span>'+moment(store_data[i].write_date).format("YYYY-MM-DD")+'</span> </div>');
            }
        }
 
@@ -56,12 +56,12 @@ $(document).ready(function(){
             $(".search>span").text("□ 총 "+store_data.length+"건의 게시물");
             if(store_data.length>10) {
                 for (var i = 0; i < 10; i++) {
-                    $(".clasified").append('<div class="post"> <span>'+store_data[i].id+'</span><span><a href="'+store_data[i].id+'">'+store_data[i].title+'</a></span> <span>'+moment(store_data[i].write_date).format("YYYY-MM-DD")+'</span> </div>');
+                    $(".clasified").append('<div class="post"> <span>'+store_data[i].id+'</span><span><a href="view?num='+store_data[i].id+'">'+store_data[i].title+'</a></span> <span>'+moment(store_data[i].write_date).format("YYYY-MM-DD")+'</span> </div>');
                 }
             }
             else{
                 for (var i = 0; i < store_data.length; i++) {
-                    $(".clasified").append('<div class="post"> <span>'+store_data[i].id+'</span><span><a href="'+store_data[i].id+'">'+store_data[i].title+'</a></span> <span>'+moment(store_data[i].write_date).format("YYYY-MM-DD")+'</span> </div>');
+                    $(".clasified").append('<div class="post"> <span>'+store_data[i].id+'</span><span><a href="view?num='+store_data[i].id+'">'+store_data[i].title+'</a></span> <span>'+moment(store_data[i].write_date).format("YYYY-MM-DD")+'</span> </div>');
                 }
             }
             $(".pre").css("display", "none");

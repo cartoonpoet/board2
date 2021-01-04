@@ -32,7 +32,7 @@
                     $(".content").html(data.basic_info[0].contents);
 
                     for(var i=0; i<data.file_info.length; i++){
-                        $(".download").append('<h1><a href="'+data.file_info[i].file+'" download>'+data.file_info[i].file.split("/")[3]+'</a></h1>')
+                        $(".download").append('<h1><a href="'+data.file_info[i].file+'" download>'+decodeURI(data.file_info[i].file.split("/")[3])+'</a></h1>')
                     }
                     _showPage();
                 }
