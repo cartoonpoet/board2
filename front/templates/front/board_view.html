@@ -10,6 +10,8 @@
     <link rel="stylesheet" href="/static/css/loading.css">
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
     <script src="/static/js/loading.js"></script>
+    <script src="/static/js/cookie.js"></script>
+    <script src="/static/js/view.js?ver=11"></script>
     <script type="text/javascript">
         function getParameterByName(name) {
             name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
@@ -19,32 +21,7 @@
         }
         var csrftoken = jQuery("[name=csrfmiddlewaretoken]").val();
         $(function() {
-            board_num = getParameterByName("num");
-            $.ajax({
-                type: 'GET',
-                dataType: 'json',
-                url: '/board/'+board_num,
-                success: function(data){
-                    console.log(data);
-                    $(".title>h1").text(data.basic_info[0].title);
-                    $(".writer").text("작성자 : "+data.basic_info[0].user.name);
-                    $(".write_date").text(moment(data.basic_info[0].write_date).format("YYYY-MM-DD HH:MM"));
-                    $(".content").html(data.basic_info[0].contents);
 
-                    for(var i=0; i<data.file_info.length; i++){
-                        $(".download").append('<h1><a href="'+data.file_info[i].file+'" download>'+decodeURI(data.file_info[i].file.split("/")[3])+'</a></h1>')
-                    }
-                    var pre="/board/view?num=";
-                    var next="/board/view?num=";
-                    pre+=Number(board_num)-1;
-                    next+=Number(board_num)+1;
-
-                    $(".Previous>a").attr("href", pre);
-                    $(".next>a").attr("href", next);
-
-                    _showPage();
-                }
-            });
         });
     </script>
 </head>
@@ -56,7 +33,7 @@
                 <div class="view_form">
                    <div class="title">
                        <h1>제목</h1>
-                       <a href="modify">수정</a>
+                       <a href="modify" class="modify">수정</a>
                     </div>
                    <ul class="post_info">
                        <li class="writer">작성자 : ㅇㅇ</li>
@@ -72,9 +49,9 @@
                     <div class="bt_group">
                         <button class="Previous"><a href="../">이전글</a></button>
                         <button class="next"><a href="../">다음글</a></button>
-                       <button class="list"><a href="/board/">목록</a></button>
+                       <button class="list"><a href="/boardlist/">목록</a></button>
 
-                       <button class="delete"><a href="delete">삭제</a></button>
+                       <button class="delete"><a href="">삭제</a></button>
 
                     </div>
 

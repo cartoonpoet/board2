@@ -2,6 +2,7 @@
     var file_name=new Array(0);
 
 $(document).ready(function(){
+
     $(".upload-hidden1").on('change', function(fileValue){
         if(window.FileReader){
             var files=$('input[name="file"]')[0].files;
@@ -56,7 +57,7 @@ $(document).ready(function(){
                     }
                     else{
                         alert('작성 완료');
-                        location.href='/board/';
+                        location.href='/boardlist/';
                     }
                 },
                 error:function(e){

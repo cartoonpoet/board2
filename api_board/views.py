@@ -2,10 +2,11 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
-from .serializers import BoardSerializer, FileSerializer, BoardJoinSerializer
+from .serializers import BoardSerializer, FileSerializer, BoardJoinSerializer, UserJoinSerializer
 from rest_framework.status import HTTP_400_BAD_REQUEST, HTTP_404_NOT_FOUND, HTTP_200_OK
 from rest_framework import generics, permissions
 from .models import BoardFile, Board
+from api_user.models import User, User_Group, Group
 
 
 # Create your views here.
@@ -20,16 +21,28 @@ class BoardView(APIView):
         # 단일 게시글 조회
         else:
             print('단일 게시물 조회')
+
+            # 글 정보
             board_queryset = Board.objects.filter(id=kwargs.get('post_num'))
             board_serializer = BoardJoinSerializer(board_queryset, many=True)
             file_queryset = BoardFile.objects.filter(num_id=kwargs.get('post_num'))
             file_serializer = FileSerializer(file_queryset, many=True)
-            print(file_serializer.data)
-            print(Board.objects.filter(id=kwargs.get('post_num')).first())
-            for i in file_serializer.data:
-                print(i)
+            #print(file_serializer.data)
+            #print(board_serializer.data)
 
-            return Response({'basic_info': board_serializer.data, 'file_info': file_serializer.data}, status=status.HTTP_200_OK)
+            # 글 작성자에 대한 정보
+
+            writer_queryset = User_Group.objects.filter(user_id=board_queryset[0].user_id)
+            writerjoin = UserJoinSerializer(writer_queryset, many=True)
+            #print(writerjoin.data)
+            
+            # 조회자에 대한 정보
+            viewer_id = request.GET['viewer']
+            viewer_queryset = User_Group.objects.filter(user_id=viewer_id)
+            viewerjoin = UserJoinSerializer(viewer_queryset, many=True)
+            #print(viewerjoin.data)
+
+            return Response({'basic_info': board_serializer.data, 'file_info': file_serializer.data, 'writer_info': writerjoin.data, 'viewer_info': viewerjoin.data}, status=status.HTTP_200_OK)
 
     def post(self, request):
         print('게시물 작성')
@@ -48,3 +61,12 @@ class BoardView(APIView):
             return Response(board_serializer.data, status=status.HTTP_201_CREATED)
         else:
             return Response(None, status=status.HTTP_200_OK)
+
+    def delete(self, request, **kwargs):
+        print(kwargs.get('post_num'))
+        if kwargs.get('post_num') is not None:
+            deletable_data = Board.objects.filter(id=kwargs.get('post_num'))
+            deletable_data.delete()
+            return Response({'message': 'Deleted'}, status=status.HTTP_200_OK)
+        else:
+            return Response({'message': 'Invalid Request'}, status=status.HTTP_200_OK)

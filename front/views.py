@@ -35,3 +35,10 @@ def view_page(request):
         return render(request, 'front/board_view.html')
     else:
         return redirect('front:login_page')
+
+
+def modify_page(request):
+    if request.user.is_authenticated:
+        return render(request, 'front/board_modify.html')
+    else:
+        return redirect('front:login_page')
