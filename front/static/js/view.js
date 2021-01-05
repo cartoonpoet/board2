@@ -19,13 +19,22 @@ $(document).ready(function(){
             for(var i=0; i<data.file_info.length; i++){
                 $(".download").append('<h1><a href="'+data.file_info[i].file+'" download>'+decodeURI(data.file_info[i].file.split("/")[3])+'</a></h1>')
             }
-            var pre="/board/view?num=";
-            var next="/board/view?num=";
-            pre+=Number(board_num)-1;
-            next+=Number(board_num)+1;
 
-            $(".Previous>a").attr("href", pre);
-            $(".next>a").attr("href", next);
+            //다음글  셋팅
+            if(data.next_post.id == undefined){
+                $(".next").css("display", "none");
+            }
+            else{
+                $(".next>a").attr("href", "/boardlist/view?num="+data.next_post.id);
+            }
+
+            //이전글 셋팅
+            if(data.prev_post.id == undefined){
+                $(".Previous").css("display", "none");
+            }
+            else{
+                $(".Previous>a").attr("href", "/boardlist/view?num="+data.prev_post.id);
+            }
 
             //같은 그룹인지 체크
             var equal_cnt=0;

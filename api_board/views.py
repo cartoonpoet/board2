@@ -7,6 +7,7 @@ from rest_framework.status import HTTP_400_BAD_REQUEST, HTTP_404_NOT_FOUND, HTTP
 from rest_framework import generics, permissions
 from .models import BoardFile, Board
 from api_user.models import User, User_Group, Group
+from django.db.models import F
 
 
 # Create your views here.
@@ -31,7 +32,6 @@ class BoardView(APIView):
             #print(board_serializer.data)
 
             # 글 작성자에 대한 정보
-
             writer_queryset = User_Group.objects.filter(user_id=board_queryset[0].user_id)
             writerjoin = UserJoinSerializer(writer_queryset, many=True)
             #print(writerjoin.data)
@@ -42,7 +42,13 @@ class BoardView(APIView):
             viewerjoin = UserJoinSerializer(viewer_queryset, many=True)
             #print(viewerjoin.data)
 
-            return Response({'basic_info': board_serializer.data, 'file_info': file_serializer.data, 'writer_info': writerjoin.data, 'viewer_info': viewerjoin.data}, status=status.HTTP_200_OK)
+            # 이전글/다음글에 대한 정보
+            next = Board.objects.filter(id__gt=kwargs.get('post_num')).first()
+            prev = Board.objects.filter(id__lt=kwargs.get('post_num')).last()
+            next_serializer = BoardSerializer(next)
+            prev_serializer = BoardSerializer(prev)
+
+            return Response({'basic_info': board_serializer.data, 'file_info': file_serializer.data, 'writer_info': writerjoin.data, 'viewer_info': viewerjoin.data, 'next_post': next_serializer.data, 'prev_post': prev_serializer.data}, status=status.HTTP_200_OK)
 
     def post(self, request):
         print('게시물 작성')
