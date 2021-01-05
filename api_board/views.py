@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from django.utils import timezone
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
@@ -69,10 +70,24 @@ class BoardView(APIView):
             return Response(None, status=status.HTTP_200_OK)
 
     def delete(self, request, **kwargs):
-        print(kwargs.get('post_num'))
+        print('게시물 삭제')
         if kwargs.get('post_num') is not None:
             deletable_data = Board.objects.filter(id=kwargs.get('post_num'))
             deletable_data.delete()
             return Response({'message': 'Deleted'}, status=status.HTTP_200_OK)
+        else:
+            return Response({'message': 'Invalid Request'}, status=status.HTTP_200_OK)
+
+    def patch(self, request, **kwargs):
+        print('게시물 수정')
+        # 파라미터가 있으면
+        if kwargs.get('post_num') is not None:
+            # 수정해야할 게시물이 존재하면
+            if len(Board.objects.filter(id=kwargs.get('post_num'))) != 0:
+                # 게시물 수정작업
+                modify_data = Board.objects.filter(id=kwargs.get('post_num')).update(title=request.data['title'], contents=request.data['contents'], user_id=request.data['user'], write_date=timezone.localtime())
+                return Response({'message': 'modification Complete'}, status=status.HTTP_200_OK)
+            else:
+                return Response({'message': 'Invalid Request'}, status=status.HTTP_200_OK)
         else:
             return Response({'message': 'Invalid Request'}, status=status.HTTP_200_OK)

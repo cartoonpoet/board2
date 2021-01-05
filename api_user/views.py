@@ -38,7 +38,8 @@ class UserView(APIView):
             user_serializer.save()  # UserSerializer의 유효성 검사를 한 뒤 DB에 저장
             usergroup = {'user_id': request.data['id'], 'group_id': request.data['group']}
             usergroup_serializer = UserGroupSerializer(data=usergroup)
-            if  usergroup_serializer.is_valid():
+
+            if usergroup_serializer.is_valid():
                 usergroup_serializer.save()
                 return Response(user_serializer.data, status=status.HTTP_201_CREATED)  # client에게 JSON response 전달
         else:
