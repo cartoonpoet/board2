@@ -1,11 +1,11 @@
 # Django-rest-framework를 이용하여 로그인/게시판 구현하기
 
 ## Conditions
-1. Frontend, Backend 분리한다.
-2. CustomUserModel, Serializer, Group 사용한다.
-3. DB Table 정규화 시킨다.
-4. PEP8 Rule 적용한다.
-5. RestFul API EndPoint 구성한다.
+1. Frontend, Backend 분리한다. - ok
+2. CustomUserModel, Serializer, Group 사용한다. - ok
+3. DB Table 정규화 시킨다. - ok
+4. PEP8 Rule 적용한다. - ~ing
+5. RestFul API EndPoint 구성한다. - ok
 
 
 ## Problems
@@ -56,3 +56,8 @@
 #### 1) 서버 API측 유효성 검사 코드가 부분적으로 삽입되어 있음..
 why? - 클라이언트 측에서 유효성 검사를 해주고 데이터를 전송하기 때문에 항상 올바른 데이터만 들어올 것이라 생각 했음. 서버를 어디서든 사용할 수 있는 API라고 생각하고 개발을 했어야 했다.
    
+
+## 의문사항
+#### 1) 수정(patch) 또는 삭제(delete) 등등 각종 요청을 보낼 시 해당 작업을 수행하기 전에 해당 사용자의 권한 검사를 수행하는가? 아니면 오로지 수정 또는 삭제에 대한 데이터만 검사를 하는가?
+- 만약 해당 사용자의 권한 검사까지 하게되면 해당 Http request에 대해 할일이 추가됨으로써 한가지 기능만 한다는 게 모호해지는 것이 아닌가? 하는 의문
+#### 2) 

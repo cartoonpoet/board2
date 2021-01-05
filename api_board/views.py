@@ -80,14 +80,32 @@ class BoardView(APIView):
 
     def patch(self, request, **kwargs):
         print('게시물 수정')
-        # 파라미터가 있으면
+        print(len(request.FILES.getlist('file')))
+        # 게시물 번호가 있으면
         if kwargs.get('post_num') is not None:
             # 수정해야할 게시물이 존재하면
             if len(Board.objects.filter(id=kwargs.get('post_num'))) != 0:
                 # 게시물 수정작업
-                modify_data = Board.objects.filter(id=kwargs.get('post_num')).update(title=request.data['title'], contents=request.data['contents'], user_id=request.data['user'], write_date=timezone.localtime())
+                modify_data = Board.objects.get(id=kwargs.get('post_num'))
+                if request.data['title'] is not None:
+                    modify_data.title = request.data['title']
+                if request.data['contents'] is not None:
+                    modify_data.contents = request.data['contents']
+                if request.data['user'] is not None:
+                    modify_data.user_id = request.data['user']
+                modify_data.write_date = timezone.localtime()
+                modify_data.save()
+
+                # 게시물 파일 작업
+                BoardFile.objects.filter(num_id=kwargs.get('post_num')).delete()
+                for file in request.FILES.getlist('file'):
+                    file_data = {'file': file, 'num': kwargs.get('post_num')}
+                    file_serializer = FileSerializer(data=file_data)
+                    if file_serializer.is_valid():
+                        file_serializer.save()
+
                 return Response({'message': 'modification Complete'}, status=status.HTTP_200_OK)
             else:
-                return Response({'message': 'Invalid Request'}, status=status.HTTP_200_OK)
+                return Response({'message': 'the post is not exist'}, status=status.HTTP_200_OK)
         else:
-            return Response({'message': 'Invalid Request'}, status=status.HTTP_200_OK)
+            return Response({'message': 'post_num is not exist'}, status=status.HTTP_200_OK)
