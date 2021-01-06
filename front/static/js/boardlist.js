@@ -84,6 +84,7 @@ $(document).ready(function(){
             type: 'DELETE',
             dataType: 'json',
             url: '../user/login/',
+            data: {"user_token": getCookie("user_token")},
             headers: { "X-CSRFToken": getCookie("csrftoken") },
             success: function(result){
                 deleteCookie('user_id');

@@ -8,4 +8,5 @@ urlpatterns = [
     # User id 전달한다.
     path('<int:user_id>', views.UserView.as_view()),
     path('login/', views.LoginView.as_view()),
+    path('group/', views.GroupView.as_view()),
 ]

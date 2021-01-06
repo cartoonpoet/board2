@@ -4,11 +4,8 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from .serializers import BoardSerializer, FileSerializer, BoardJoinSerializer, UserJoinSerializer
-from rest_framework.status import HTTP_400_BAD_REQUEST, HTTP_404_NOT_FOUND, HTTP_200_OK
-from rest_framework import generics, permissions
 from .models import BoardFile, Board
-from api_user.models import User, User_Group, Group
-from django.db.models import F
+from api_user.models import User_Group
 
 
 # Create your views here.

@@ -1,10 +1,10 @@
 from rest_framework import serializers
 from django.contrib.auth import authenticate
-from . import models
+
 from .models import Board, BoardFile
 from api_user.models import User_Group
 from api_user.serializers import UserSerializer, UserGroupSerializer
-
+from . import models
 
 class BoardSerializer(serializers.ModelSerializer):
     class Meta:
