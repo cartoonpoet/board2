@@ -45,7 +45,7 @@
   <br> └ GET 'user/(user_id)' : 특정 사용자 정보 불러오기
   <br> └ POST 'user/' : 회원가입 
   <br> └ ~~PATCH 'user/(user_id)' : 회원정보 수정~~
-  <br> └ ~~DELETE 'user/(user_id)' : 회원탈퇴~~
+  <br> └ DELETE 'user/(user_id)' : 회원탈퇴
   <br> └ POST 'user/login/' : 로그인
   <br> └ DELETE 'user/login/' : 로그아웃 
   <br> └ POST 'user/group/' : 그룹 생성 
