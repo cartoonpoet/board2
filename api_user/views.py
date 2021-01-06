@@ -27,9 +27,8 @@ class UserView(APIView):
 
     # 회원가입
     def post(self, request):
-        print('회원가입')
         user_serializer = UserSerializer(data=request.data)  # Request의 data를 UserSerializer로 변환
-        print(request.data)
+
         if user_serializer.is_valid():
             user_serializer.save()  # UserSerializer의 유효성 검사를 한 뒤 DB에 저장
             usergroup = {'user_id': request.data['id'], 'group_id': request.data['group']}
@@ -68,13 +67,11 @@ class UserView(APIView):
 
 
 # 로그인은 아래 정보 참조
-# https://paigeblog.tistory.com/17
 class LoginView(generics.GenericAPIView):
     serializer_class = LoginSerializer
 
     # 로그인
     def post(self, request):
-        print('로그인')
         # ID/PW 확인
         if authenticate(id=request.data['id'], password=request.data['password']) is None:
             return Response({
@@ -94,7 +91,6 @@ class LoginView(generics.GenericAPIView):
 
     # 로그아웃
     def delete(self, request):
-        print('로그아웃')
         if request.data.get('user_token') is not None:
             logout(request)
             return Response({'message': 'logout complete'}, status=status.HTTP_204_NO_CONTENT)
@@ -104,7 +100,6 @@ class LoginView(generics.GenericAPIView):
 
 class GroupView(APIView):
     def post(self, request):
-        print('그룹 생성')
         if request.data.get('group') is not None:
             data = Group.objects.create(id=request.data.get('group'))
             return Response({'message': 'group created'}, status=status.HTTP_201_CREATED)
