@@ -41,8 +41,15 @@ class BoardTests(APITestCase):
         response = self.client.get(url, data)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
+    def delete_post(self):
+        url = '/board/1'
+        response = self.client.delete(url)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(Board.objects.count(), 0)
+
     def test_board(self):
         self.write_post()
         self.modify_post()
         self.get_all_post()
         self.get_one_post()
+        self.delete_post()
