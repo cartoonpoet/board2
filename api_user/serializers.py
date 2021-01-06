@@ -6,6 +6,15 @@ from .models import User, User_Group, Group
 
 class UserSerializer(serializers.ModelSerializer):
     # 오버라이딩, 그냥 save하니까 계정 패스워드 암호화가 안됨.
+    def create(self, validated_data):
+        user = User(
+            id=validated_data['id'],
+            name=validated_data['name'],
+            password=validated_data['password']
+        )
+        user.save()
+        return user
+
     def save(self, **kwargs):
         User.objects.create_user(id=self.data['id'], name=self.data['name'], password=self.data['password'])
 

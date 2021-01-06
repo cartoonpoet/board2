@@ -48,14 +48,13 @@ class UserView(APIView):
         else:
             user_id = kwargs.get('user_id')
             user_object = User.objects.get(id=user_id)
-            print(user_object)
             update_user_serializer = UserSerializer(user_object, data=request.data)
-            print(update_user_serializer)
+
             if update_user_serializer.is_valid():
                 update_user_serializer.save()
                 return Response(update_user_serializer.data, status=status.HTTP_200_OK)
             else:
-                return Response("invalid request", status=status.HTTP_400_BAD_REQUEST)
+                return Response("invalid request", status=status.HTTP_204_NO_CONTENT)
 
     # 회원탈퇴
     def delete(self, request, **kwargs):

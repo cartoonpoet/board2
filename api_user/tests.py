@@ -22,7 +22,7 @@ class UserTests(APITestCase):
 
     def modify_account(self):
         url = '/user/testcase'
-        data = QueryDict('password=change')
+        data = QueryDict('password=change&id=testcase')
         response = self.client.patch(url, data)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
@@ -35,4 +35,4 @@ class UserTests(APITestCase):
         self.assertEqual(Group.objects.count(), 2)
         self.create_account()
         #self.modify_account()
-        self.delete_account()
+        #self.delete_account()

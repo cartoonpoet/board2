@@ -16,7 +16,7 @@ class BoardTests(APITestCase):
         User_Group.objects.create(user_id_id='test', group_id_id='1')
 
     def write_post(self):
-        url = '/board/write/'
+        url = reverse('api_board:board_API')
         data = QueryDict('title=post&contents=write&user=test')
         response = self.client.post(url, data)
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
@@ -24,25 +24,25 @@ class BoardTests(APITestCase):
         self.assertEqual(Board.objects.get().title, 'post')
 
     def modify_post(self):
-        url = '/board/1'
+        url = reverse('api_board:board_API', kwargs={'post_num': '1'})
         data = QueryDict('title=수정&contents=수정&user=test')
         response = self.client.patch(url, data)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(Board.objects.get().title, '수정')
 
     def get_all_post(self):
-        url = '/board/list/'
+        url = reverse('api_board:board_API')
         response = self.client.get(url)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
     def get_one_post(self):
-        url = '/board/1'
+        url = reverse('api_board:board_API', kwargs={'post_num': '1'})
         data = {'viewer': 'test'}
         response = self.client.get(url, data)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
     def delete_post(self):
-        url = '/board/1'
+        url = reverse('api_board:board_API', kwargs={'post_num': '1'})
         response = self.client.delete(url)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(Board.objects.count(), 0)
