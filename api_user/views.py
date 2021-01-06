@@ -42,13 +42,15 @@ class UserView(APIView):
 
     # 회원정보 수정
     def patch(self, request, **kwargs):
+        print('회원정보 수정')
         if kwargs.get('user_id') is None:
             return Response("invalid request", status=status.HTTP_400_BAD_REQUEST)
         else:
             user_id = kwargs.get('user_id')
             user_object = User.objects.get(id=user_id)
-
+            print(user_object)
             update_user_serializer = UserSerializer(user_object, data=request.data)
+            print(update_user_serializer)
             if update_user_serializer.is_valid():
                 update_user_serializer.save()
                 return Response(update_user_serializer.data, status=status.HTTP_200_OK)

@@ -20,6 +20,19 @@ class UserTests(APITestCase):
         self.assertEqual(User.objects.count(), 1)
         self.assertEqual(User.objects.get().name, 'testcase')
 
-    def test1(self):
+    def modify_account(self):
+        url = '/user/testcase'
+        data = QueryDict('password=change')
+        response = self.client.patch(url, data)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+    def delete_account(self):
+        url = '/user/testcase'
+        response = self.client.delete(url)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+    def test_account(self):
         self.assertEqual(Group.objects.count(), 2)
         self.create_account()
+        #self.modify_account()
+        self.delete_account()

@@ -43,6 +43,7 @@ class BoardView(APIView):
 
     def post(self, request):
         board_serializer = BoardSerializer(data=request.data)
+        print(request.data)
         # 게시물 저장
         if board_serializer.is_valid():
             board_serializer.save()
